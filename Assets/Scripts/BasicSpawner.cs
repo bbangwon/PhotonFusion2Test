@@ -10,6 +10,10 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     private NetworkRunner _runner;
 
+    [SerializeField]
+    private NetworkPrefabRef _playerPrefab;
+    private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
+
     async void StartGame(GameMode mode)
     {
         // Fusion Runner을 생성하고 사용자 입력을 제공할 것임을 알립니다.
@@ -30,7 +34,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             GameMode = mode,
             SessionName = "TestRoom",
             Scene = scene,
-            SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>(),
+            SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>(),            
         });
     }
 
@@ -94,10 +98,24 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
+        if(runner.IsServer)
+        {
+            //유니크한 위치에 플레이어를 생성합니다.
+            Vector3 spawnPosition = new Vector3((player.RawEncoded % runner.Config.Simulation.PlayerCount) * 3, 1, 0);
+            NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
+
+            //플레이어 아바타에 접근하기 쉽도록 저장합니다.
+            _spawnedCharacters.Add(player, networkPlayerObject);
+        }
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
+        if (_spawnedCharacters.TryGetValue(player, out NetworkObject networkObject))
+        {
+            runner.Despawn(networkObject);
+            _spawnedCharacters.Remove(player);
+        }
     }
 
     public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress)
