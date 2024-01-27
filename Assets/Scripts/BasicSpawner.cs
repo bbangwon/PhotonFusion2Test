@@ -14,6 +14,8 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     private NetworkPrefabRef _playerPrefab;
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
+    private bool _mouseButton0;
+
     async void StartGame(GameMode mode)
     {
         // Fusion Runner을 생성하고 사용자 입력을 제공할 것임을 알립니다.
@@ -36,6 +38,11 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             Scene = scene,
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>(),            
         });
+    }
+
+    private void Update()
+    {
+        _mouseButton0 |= Input.GetMouseButton(0);
     }
 
     private void OnGUI()
@@ -103,6 +110,9 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         {
             data.direction += Vector3.right;
         }
+
+        data.buttons.Set(NetworkInputData.MOUSEBUTTON0, _mouseButton0);
+        _mouseButton0 = false;
 
         input.Set(data);
     }
