@@ -1,18 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
-public class PhysxBall : MonoBehaviour
+public class PhysxBall : NetworkBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [Networked] private TickTimer life { get; set; }
+
+    public void Init(Vector3 forward)
     {
-        
+        life = TickTimer.CreateFromSeconds(Runner, 5);
+        GetComponent<Rigidbody>().velocity = forward;
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void FixedUpdateNetwork()
     {
-        
+        if (life.ExpiredOrNotRunning(Runner))
+        {
+            Runner.Despawn(Object);
+        }
     }
 }
