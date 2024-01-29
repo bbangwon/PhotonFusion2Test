@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 782420842042477169}
   - component: {fileID: 4479675999270883549}
   - component: {fileID: 1356261589059151571}
+  - component: {fileID: 7105148809453459349}
   m_Layer: 0
   m_Name: PlayerCharacter
   m_TagString: Untagged
@@ -128,6 +129,7 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 1356261589059151571}
+  - {fileID: 7105148809453459349}
 --- !u!143 &4479675999270883549
 CharacterController:
   m_ObjectHideFlags: 0
@@ -170,3 +172,16 @@ MonoBehaviour:
   SyncParent: 0
   _autoAOIOverride: 1
   DisableSharedModeInterpolation: 0
+--- !u!114 &7105148809453459349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8153789266432776959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9aea6a046ea4875448833c40c5e1d225, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerSpeed: 2
