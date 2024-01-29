@@ -16,11 +16,24 @@ public class Player : NetworkBehaviour
     private NetworkCharacterController _cc;
     private Vector3 _forward;
 
+    [Networked]
+    public bool spawned { get; set; }
+
+    private ChangeDetector _changeDetector;
+
+    public Material _material;
 
     private void Awake()
     {
         _cc = GetComponent<NetworkCharacterController>();
         _forward = transform.forward;
+
+        _material = GetComponentInChildren<MeshRenderer>().material;
+    }
+
+    public override void Spawned()
+    {
+        _changeDetector = GetChangeDetector(ChangeDetector.Source.SimulationState);
     }
 
     public override void FixedUpdateNetwork()
@@ -47,6 +60,8 @@ public class Player : NetworkBehaviour
                             //동기화 전 공을 초기화 합니다.
                             o.GetComponent<Ball>().Init();
                         });
+
+                    spawned = !spawned;
                 }
 
                 else if(data.buttons.IsSet(NetworkInputData.MOUSEBUTTON1))
@@ -64,5 +79,22 @@ public class Player : NetworkBehaviour
                 }
             }
         }
+    }
+
+    public override void Render()
+    {
+        foreach (var change in _changeDetector.DetectChanges(this))
+        {
+            switch (change)
+            {
+                case nameof(spawned):
+                    _material.color = Color.white;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        _material.color = Color.Lerp(_material.color, Color.blue, Time.deltaTime);
     }
 }
