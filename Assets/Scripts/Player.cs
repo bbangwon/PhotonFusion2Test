@@ -6,6 +6,9 @@ public class Player : NetworkBehaviour
 
     [SerializeField]
     private Ball _prefabBall;
+
+    [SerializeField]
+    private PhysxBall _prefabPhysxBall;
     
     [Networked]
     private TickTimer delay { get; set; }
@@ -43,6 +46,20 @@ public class Player : NetworkBehaviour
                         Object.InputAuthority, (runner, o) => {
                             //동기화 전 공을 초기화 합니다.
                             o.GetComponent<Ball>().Init();
+                        });
+                }
+
+                else if(data.buttons.IsSet(NetworkInputData.MOUSEBUTTON1))
+                {
+                    delay = TickTimer.CreateFromSeconds(Runner, 0.5f);
+
+                    Runner.Spawn(_prefabPhysxBall,
+                        transform.position + _forward,
+                        Quaternion.LookRotation(_forward),
+                        Object.InputAuthority, (runner, o) =>
+                        {
+                            //동기화 전 공을 초기화 합니다.
+                            o.GetComponent<PhysxBall>().Init(10 * _forward);
                         });
                 }
             }

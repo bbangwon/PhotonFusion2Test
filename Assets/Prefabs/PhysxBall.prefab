@@ -104,6 +104,7 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 7352865965170545005}
+  - {fileID: 7393259809125403373}
 --- !u!135 &5755046487585206118
 SphereCollider:
   m_ObjectHideFlags: 0

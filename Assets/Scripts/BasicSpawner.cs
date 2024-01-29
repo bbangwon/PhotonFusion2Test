@@ -4,6 +4,7 @@ using Fusion;
 using Fusion.Sockets;
 using System;
 using UnityEngine.SceneManagement;
+using Fusion.Addons.Physics;
 
 public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 {
@@ -15,6 +16,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
     private bool _mouseButton0;
+    private bool _mouseButton1;
 
     async void StartGame(GameMode mode)
     {
@@ -38,11 +40,14 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             Scene = scene,
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>(),            
         });
+
+        gameObject.AddComponent<RunnerSimulatePhysics3D>();
     }
 
     private void Update()
     {
         _mouseButton0 |= Input.GetMouseButton(0);
+        _mouseButton1 |= Input.GetMouseButton(1);
     }
 
     private void OnGUI()
@@ -113,6 +118,9 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
         data.buttons.Set(NetworkInputData.MOUSEBUTTON0, _mouseButton0);
         _mouseButton0 = false;
+
+        data.buttons.Set(NetworkInputData.MOUSEBUTTON1, _mouseButton1);
+        _mouseButton1 = false;
 
         input.Set(data);
     }
