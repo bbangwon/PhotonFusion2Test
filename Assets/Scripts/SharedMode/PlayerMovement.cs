@@ -15,6 +15,8 @@ namespace SharedMode
         public float JumpForce = 5f;
         public float GravityValue = -9.81f;
 
+        public Camera Camera;
+
         private void Awake()
         {
             _controller = GetComponent<CharacterController>();
@@ -25,6 +27,15 @@ namespace SharedMode
             if(Input.GetButtonDown("Jump"))
             {
                 _jumpPressed = true;
+            }
+        }
+
+        public override void Spawned()
+        {
+            if(HasStateAuthority)
+            {
+                Camera = Camera.main;
+                Camera.GetComponent<FirstPersonCamera>().Target = transform;
             }
         }
 
@@ -40,8 +51,10 @@ namespace SharedMode
                 _velocity = new Vector3(0, -1, 0);
             }
 
+            Quaternion cameraRotationY = Quaternion.Euler(0, Camera.transform.rotation.eulerAngles.y, 0);
+
             // FixedUpdateNetwork()에서는 Runner.DeltaTime을 사용해야함  
-            Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * Runner.DeltaTime * PlayerSpeed;
+            Vector3 move = cameraRotationY * new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * Runner.DeltaTime * PlayerSpeed;
 
             _velocity.y += GravityValue * Runner.DeltaTime;
             if(_jumpPressed && _controller.isGrounded)
