@@ -16,6 +16,8 @@ GameObject:
   - component: {fileID: 4479675999270883549}
   - component: {fileID: 1356261589059151571}
   - component: {fileID: 7105148809453459349}
+  - component: {fileID: 1614345938291281299}
+  - component: {fileID: 8890483970229009475}
   m_Layer: 0
   m_Name: PlayerCharacter
   m_TagString: Untagged
@@ -130,6 +132,8 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 1356261589059151571}
   - {fileID: 7105148809453459349}
+  - {fileID: 1614345938291281299}
+  - {fileID: 8890483970229009475}
 --- !u!143 &4479675999270883549
 CharacterController:
   m_ObjectHideFlags: 0
@@ -185,3 +189,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerSpeed: 2
+  JumpForce: 5
+  GravityValue: -9.81
+  Camera: {fileID: 0}
+--- !u!114 &1614345938291281299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8153789266432776959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00bd6f7bb47a6f84387572169faf87f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _NetworkedHealth: 100
+--- !u!114 &8890483970229009475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8153789266432776959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10aa342e181c52449917cad8b9323735, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Damage: 10
+  PlayerMovement: {fileID: 7105148809453459349}
